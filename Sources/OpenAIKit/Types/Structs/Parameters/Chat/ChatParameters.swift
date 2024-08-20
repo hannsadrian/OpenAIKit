@@ -100,7 +100,7 @@ public struct ChatParameters {
     public var functionCall: String?
 
     /// A list of functions the model may generate JSON inputs for.
-    public var functions: [Function]?
+    public var tools: [Tool]?
 
     public init(
         model: ChatModels,
@@ -116,7 +116,7 @@ public struct ChatParameters {
         logitBias: [String : Int]? = nil,
         user: String? = nil,
         functionCall: String? = nil,
-        functions: [Function]? = nil
+        tools: [Tool]? = nil
     ) {
         self.model = model
         self.customModel = customModel
@@ -131,7 +131,7 @@ public struct ChatParameters {
         self.logitBias = logitBias
         self.user = user
         self.functionCall = functionCall
-        self.functions = functions
+        self.tools = tools
     }
 
     /// The body of the URL used for OpenAI API requests.
@@ -144,7 +144,9 @@ public struct ChatParameters {
             "stream": self.stream,
             "presence_penalty": self.presencePenalty,
             "frequency_penalty": self.frequencyPenalty,
-            "messages": self.messages.map { $0.body }
+            "messages": self.messages.map { $0.body },
+            "tool_choice": "auto",
+            "parallel_tool_calls": true
         ]
 
         if let stop = self.stop {
@@ -163,8 +165,8 @@ public struct ChatParameters {
             result["function_call"] = functionCall
         }
 
-        if let functions = self.functions {
-            result["functions"] = functions.map { $0.body }
+        if let functions = self.tools {
+            result["tools"] = functions.map { $0.body }
         }
 
         return result

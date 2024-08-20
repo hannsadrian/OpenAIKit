@@ -34,4 +34,16 @@ public struct FunctionCall: Codable {
 
     /// The name of the function to call.
     public let name: String
+    
+    public init(arguments: String, name: String) {
+        self.arguments = arguments
+        self.name = name
+    }
+    
+    public var body: [String: String] {
+        return [
+            "arguments": self.arguments,
+            "name": self.name
+        ]
+    }
 }

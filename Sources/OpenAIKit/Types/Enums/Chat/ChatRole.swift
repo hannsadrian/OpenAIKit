@@ -33,4 +33,6 @@ public enum ChatRole: String, Codable {
 
     /// The main AI chatting
     case assistant
+    
+    case tool
 }
